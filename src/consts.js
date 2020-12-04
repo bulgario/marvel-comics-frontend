@@ -1,7 +1,8 @@
 export const ROUTES = {
   HOME: "/home",
   LOGIN: "/login",
-  SIGNUP: "/signup"
+  SIGNUP: "/signup",
+  SEARCH: "/search"
 };
 
 export const BASE_URL = ""

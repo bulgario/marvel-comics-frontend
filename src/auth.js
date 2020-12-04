@@ -1,3 +1,8 @@
 export const isAuthenticated = () => {
-  return false;
+  return true;
+};
+
+
+export const signIn = (email, password) => {
+  return true;
 };

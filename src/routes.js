@@ -7,6 +7,7 @@ import { isAuthenticated } from "./auth";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
+import Search from "./pages/Search";
 
 const PrivateRoute = ({ component: Component , ...rest}) => (
   <Route
@@ -28,6 +29,7 @@ const Routes = () => (
       <Route path={ROUTES.LOGIN} component={Login} />
       <Route path={ROUTES.SIGNUP} component={SignUp} />
       <PrivateRoute path={ROUTES.HOME} component={Home} />
+      <PrivateRoute path={ROUTES.SEARCH} component={Search} />
     </Switch>
   </BrowserRouter>
 );
