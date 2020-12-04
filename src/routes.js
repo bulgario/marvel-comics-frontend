@@ -6,6 +6,7 @@ import { isAuthenticated } from "./auth";
 //PAGES
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 
 const PrivateRoute = ({ component: Component , ...rest}) => (
   <Route
@@ -25,6 +26,7 @@ const Routes = () => (
     <Switch>
       <Route exact path={"/"} component={Login} />
       <Route path={ROUTES.LOGIN} component={Login} />
+      <Route path={ROUTES.SIGNUP} component={SignUp} />
       <PrivateRoute path={ROUTES.HOME} component={Home} />
     </Switch>
   </BrowserRouter>
