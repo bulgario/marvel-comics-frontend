@@ -7,8 +7,11 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withRouter } from 'react-router-dom';
+import axios from 'axios';
 
 import marvelLoginIcon from "../../assets/MarvelLogo.svg";
+
+import { BASE_URL } from "../../consts";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,7 +40,7 @@ const SignUp = (props) => {
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
   const [ success, setSuccess ] = useState(false);
-
+  const [ fail, setFailed ] = useState(false);
 
   const handleChange = (prop) => eve => {
     const input = eve.target.value;
@@ -59,20 +62,25 @@ const SignUp = (props) => {
 
   const handleSubmit = async (eve) => {
     const delay = ms => new Promise(res => setTimeout(res, ms));
-
-    //chamada para backend
-    const chamadaBackEnd = true;
-    //se retornar true
-    if(chamadaBackEnd) {
-      eve.preventDefault()
-      setSuccess(true);
-      await delay(3000);
-
-      props.history.push('/login');
-    } else {
-      setSuccess(false);
-      props.history.push('/login');
-    };
+    if (firstname, lastname, email, password) {
+      eve.preventDefault();
+      try {
+        await axios.post(`${BASE_URL}/cadastro`, {
+          nome: firstname,
+          sobrenome: lastname,
+          email: email,
+          senha: password
+        });
+        setSuccess(true);
+        await delay(2500);
+        props.history.push('/login');
+      } catch (error) {
+        setFailed(true);
+        await delay(2000);
+        console.log(error);
+      }
+      
+    }
   };
 
 
@@ -82,6 +90,13 @@ const SignUp = (props) => {
       <Typography variant="h5" gutterBottom>Super Redirecionamento Rolando!</Typography>
     </>
   );
+
+  const tryAgain = () => (
+    <>
+      <Typography variant="h4" gutterBottom>Algo aconteceu meu super heroi!</Typography>
+      <Typography variant="h5" gutterBottom>Tente novamente!</Typography>
+    </>
+  )
 
   const formRegister = () => (
       <div className={classes.paper}>
@@ -173,6 +188,9 @@ const SignUp = (props) => {
         height={500} 
         width={500} 
       />
+      { fail && (
+        tryAgain()
+      ) }
        {success ? (
         successMessage()
       ) : (

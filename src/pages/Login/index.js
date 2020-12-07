@@ -136,6 +136,11 @@ const Login = (props) => {
           ENTRAR
       </Button>
       </Grid>
+      <Grid item xs={3}>
+      <Typography variant={'body2'}>
+            <a href="/SignUp">Não tem conta? Registre-se</a>
+          </Typography>
+      </Grid>
       </Grid>
     </>
   )
