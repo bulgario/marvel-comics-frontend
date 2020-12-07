@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import api from "../../services/api";
 import { BASE_URL } from "../../consts";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,7 +25,12 @@ const useStyles = makeStyles((theme) => ({
 const User = () => {
   const classes = useStyles();
   const [userid, setUserId] = useState();
-  const [user, setUserData] = useState({});
+  const [email, setUserEmail] = useState({});
+  const [id, setuserId] = useState();
+  const [nome, setUserName] = useState("");
+  const [sobrenome, setUserSurname] = useState("");
+  const [oldPass, setOldPass] = useState("");
+  const [newPass, setNewPass] = useState("");
 
   const getUserId = async () => {
     const { email } = JSON.parse(window.localStorage.getItem("data"));
@@ -46,7 +52,10 @@ const User = () => {
   const getUserData = async () => {
     try {
       await axios.get(`${BASE_URL}/user/${userid}`).then((res) => {
-        setUserData(res.data);
+        setUserEmail(res.data.email)
+        setuserId(res.data.id)
+        setUserName(res.data.nome)
+        setUserSurname(res.data.sobrenome)
       });
     } catch (error) {
       console.log(error);
@@ -61,14 +70,37 @@ const User = () => {
     getUserData();
   }, [userid]);
 
-  const handleSubmitForm = (eve) => {
+  const handleSubmitForm = async (eve) => {
     eve.preventDefault();
-    // request para backend
+    try {
+      await api.put(`/user/edit`, {
+        nome: nome,
+        sobrenome: sobrenome,
+        email: email,
+        senhaAntiga: oldPass,
+        senhaNova: newPass
+      });
+    } catch (error) {
+      console.log("Erro editar usuário", error);
+    }
   };
 
   const handleChange = (prop) => (eve) => {
     const input = eve.target.value;
-    setUserData((prevState) => ({ ...prevState, [prop]: input }));
+    switch (prop) {
+      case 'nome':
+        setUserName(input)
+        break;
+      case 'sobrenome':
+        setUserSurname(input)
+        break;
+      case 'senhaAntiga':
+        setOldPass(input)
+        break;
+      case 'senhaNova':
+        setNewPass(input)
+        break;
+    };
   };
 
   return (
@@ -97,7 +129,7 @@ const User = () => {
             className={classes.textField}
             margin="normal"
             variant="outlined"
-            value={user.nome}
+            value={nome}
             onChange={handleChange("nome")}
           />
         </Grid>
@@ -109,9 +141,8 @@ const User = () => {
             className={classes.textField}
             margin="normal"
             variant="outlined"
-            value={user.nome}
             onChange={handleChange("nome")}
-            value={user.sobrenome}
+            value={sobrenome}
             onChange={handleChange("sobrenome")}
           />
         </Grid>
@@ -123,7 +154,7 @@ const User = () => {
             className={classes.textField}
             margin="normal"
             variant="outlined"
-            value={user.email}
+            value={email}
             onChange={handleChange("email")}
           />
         </Grid>
@@ -131,12 +162,24 @@ const User = () => {
           <TextField
             required
             id="outlined-required"
-            label="Senha"
+            label="Senha antiga"
             className={classes.textField}
             margin="normal"
             variant="outlined"
-            value={user.senha}
-            onChange={handleChange("senha")}
+            value={oldPass}
+            onChange={handleChange("senhaAntiga")}
+          />
+        </Grid>
+        <Grid item xs={10}>
+          <TextField
+            required
+            id="outlined-required"
+            label="Senha nova"
+            className={classes.textField}
+            margin="normal"
+            variant="outlined"
+            value={newPass}
+            onChange={handleChange("senhaNova")}
           />
         </Grid>
         <Grid item xs={10}>
