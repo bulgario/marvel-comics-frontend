@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Search from "./pages/Search";
+import Edit from "./pages/User/edit";
 
 const PrivateRoute = ({ component: Component , ...rest}) => (
   <Route
@@ -30,6 +31,7 @@ const Routes = () => (
       <Route path={ROUTES.SIGNUP} component={SignUp} />
       <PrivateRoute path={ROUTES.HOME} component={Home} />
       <PrivateRoute path={ROUTES.SEARCH} component={Search} />
+      <PrivateRoute path={ROUTES.EDIT} component={Edit} />
     </Switch>
   </BrowserRouter>
 );

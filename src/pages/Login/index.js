@@ -8,7 +8,9 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import marvelLoginIcon from "../../assets/MarvelLogo.svg";
 
-import { signIn } from "../../auth";
+import axios from "axios";
+
+import { BASE_URL } from "../../consts";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,12 +51,27 @@ const Login = (props) => {
     };
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     if(email && password) {
       setLoginSubmitted(true);
-      return signIn(email, password) && (
-        props.history.push('/search') 
-      )
+      try {
+        await axios.post(`${BASE_URL}/user/login`, {
+          email: email,
+          senha: password
+        })
+        .then(res => {
+          const data = {
+            token: res.data.token,
+            email: email
+          }
+          window.localStorage.setItem('data', JSON.stringify(data));
+        });
+          props.history.push('/search')
+      } catch (error) {
+        console.log(error);
+      }
+
+      
     }
     if (!email && !password) {
       return (setEmailNameError(USER_EMPTY) && setPasswordNameError(PASS_EMPTY));
