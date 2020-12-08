@@ -15,6 +15,7 @@ import { Button } from '@material-ui/core';
 import { Grid } from '@material-ui/core/';
 
 import ComicCard from "../../components/ComicCard";
+import CharacterCard from "../../components/CharacterCard";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -174,7 +175,17 @@ const Search = (props) => {
  );
 
  const renderCharacter = () => (
-  <div>Character</div>
+  <Grid container spacing={10} >
+    {characters.characters.map(character => (
+        <Grid item className={classes.cards}>
+          <CharacterCard 
+            character={character}
+            pagination={characters.pagination} 
+            history={props.history} 
+          />
+        </Grid>
+    ))}
+  </Grid>
 );
 
   return (

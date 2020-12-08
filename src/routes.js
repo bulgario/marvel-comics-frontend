@@ -11,6 +11,7 @@ import Search from "./pages/Search";
 import Edit from "./pages/User/edit";
 import Favorite from "./pages/User/favorite";
 import Comic from "./pages/Comic";
+import Character from "./pages/Character";
 
 const PrivateRoute = ({ component: Component , ...rest}) => (
   <Route
@@ -32,6 +33,7 @@ const Routes = () => (
       <Route path={ROUTES.LOGIN} component={Login} />
       <Route path={ROUTES.SIGNUP} component={SignUp} />
       <Route path={ROUTES.COMIC} component={Comic} />
+      <Route path={ROUTES.CHARACTER} component={Character} />
       <PrivateRoute path={ROUTES.HOME} component={Home} />
       <PrivateRoute path={ROUTES.SEARCH} component={Search} />
       <PrivateRoute path={ROUTES.EDIT} component={Edit} />
