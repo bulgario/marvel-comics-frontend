@@ -61,6 +61,7 @@ const Login = (props) => {
         })
         .then(res => {
           const data = {
+            id: res.data.id,
             token: res.data.token,
             email: email
           }

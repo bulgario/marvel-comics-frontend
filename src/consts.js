@@ -3,7 +3,9 @@ export const ROUTES = {
   LOGIN: "/login",
   SIGNUP: "/signup",
   SEARCH: "/search",
-  EDIT: "/edit"
+  EDIT: "/edit",
+  FAVORITE: "/favorite",
+  COMIC: "/comic/:id"
 };
 
 export const BASE_URL = "http://localhost:4000"

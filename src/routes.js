@@ -9,6 +9,8 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Search from "./pages/Search";
 import Edit from "./pages/User/edit";
+import Favorite from "./pages/User/favorite";
+import Comic from "./pages/Comic";
 
 const PrivateRoute = ({ component: Component , ...rest}) => (
   <Route
@@ -29,9 +31,11 @@ const Routes = () => (
       <Route exact path={"/"} component={Login} />
       <Route path={ROUTES.LOGIN} component={Login} />
       <Route path={ROUTES.SIGNUP} component={SignUp} />
+      <Route path={ROUTES.COMIC} component={Comic} />
       <PrivateRoute path={ROUTES.HOME} component={Home} />
       <PrivateRoute path={ROUTES.SEARCH} component={Search} />
       <PrivateRoute path={ROUTES.EDIT} component={Edit} />
+      <PrivateRoute path={ROUTES.FAVORITE} component={Favorite} />
     </Switch>
   </BrowserRouter>
 );

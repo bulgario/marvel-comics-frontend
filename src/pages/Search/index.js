@@ -10,6 +10,11 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import { Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core/';
+
+import ComicCard from "../../components/ComicCard";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -61,20 +66,41 @@ const useStyles = makeStyles((theme) => ({
       width: '20ch',
     },
   },
-  sectionDesktop: {
+  icon: {
+    marginRight: 10,
     display: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'flex',
     },
+  cards: {
+    marginTop: 10
+  }
   },
 }));
 
 const Search = (props) => {
   const classes = useStyles();
   const [ user, setUser ] = useState({});
+  const [ comicOption, setComicOption ] = useState(false);
+  const [ characterOption, setCharacterOption ] = useState(false);
+  const [ comics, setComics ] = useState({});
+  const [ characters, setCharacters ] = useState({});
 
-  const handleProfileMenuOpen = (event) => {
+  useEffect(() => {
+    getUserData()
+  }, []);
+
+  useEffect(() => {
+    getComicData()
+    getCharacterData()
+  }, [])
+
+  const handleProfileMenuOpen = () => {
     props.history.push('/edit');
+  };
+
+  const handleFavoriteMenuOpen = () => {
+    props.history.push('/favorite');
   };
 
   const getUserData = async () => {
@@ -88,9 +114,68 @@ const Search = (props) => {
     });
   };
 
-  useEffect(() => {
-    getUserData()
-  }, []);
+  const getComicData = async () => {
+    try {
+      await axios.get(`${BASE_URL}/comics`)
+      .then(data => {
+        setComics(data.data);
+    });
+    } catch (error) {
+      console.log("Error trying get comics", error)
+    }
+  };
+
+  const getCharacterData = async () => {
+    try {
+      await axios.get(`${BASE_URL}/characters`)
+      .then(data => {
+        setCharacters(data.data);
+    });
+    } catch (error) {
+      console.log("Error trying get characters", error)
+    }
+  };
+
+ const handleClick = (type) => {
+    switch (type) {
+      case 'comic':
+        if(characterOption) {
+          setCharacterOption(false)
+          setComicOption(true)
+        } else {
+          setComicOption(true)
+        }
+        break;
+      case 'character':
+        if(comicOption) {
+          setCharacterOption(true)
+          setComicOption(false)
+        } else {
+          setCharacterOption(true)
+        }
+        break;
+      default:
+        break;
+    }
+ }
+
+ const renderComic = () => (
+  <Grid container spacing={10} >
+    {comics.comics.map(comic => (
+        <Grid item className={classes.cards}>
+          <ComicCard 
+            comic={comic}
+            pagination={comics.pagination} 
+            history={props.history} 
+          />
+        </Grid>
+    ))}
+  </Grid>
+ );
+
+ const renderCharacter = () => (
+  <div>Character</div>
+);
 
   return (
     <div className={classes.grow}>
@@ -112,11 +197,29 @@ const Search = (props) => {
             inputProps={{ 'aria-label': 'search' }}
           />
         </div>
+        <div>
+          <Button 
+            variant="contained" 
+            color="primary"
+            onClick={() => handleClick('comic')}
+          >
+            Comics
+          </Button>
+        </div>
+        <div>
+          <Button 
+            variant="contained" 
+            color="primary"
+            onClick={ () => handleClick('character')}
+          >
+            Characters
+          </Button>
+        </div>
         <div className={classes.grow} />
-        <div className={classes.sectionDesktop}>
+        <div className={classes.icon}>
           <IconButton
             edge="end"
-            aria-label="account of current user"
+            aria-label="edit"
             aria-haspopup="true"
             onClick={handleProfileMenuOpen}
             color="inherit"
@@ -124,8 +227,26 @@ const Search = (props) => {
             <AccountCircle />
           </IconButton>
         </div>
+        <div className={classes.icon}>
+          <FavoriteIcon
+            edge="end"
+            aria-label="favorite"
+            aria-haspopup="true"
+            onClick={handleFavoriteMenuOpen}
+            color="inherit"
+          >
+            <AccountCircle />
+          </FavoriteIcon>
+        </div>
       </Toolbar>
     </AppBar>
+    <div>
+      { comicOption ? (
+        renderComic()
+      ) : characterOption ? (
+        renderCharacter()
+      ) : null}
+    </div>
   </div>
   )
 };
