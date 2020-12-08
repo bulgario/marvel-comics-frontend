@@ -70,8 +70,6 @@ const Login = (props) => {
       } catch (error) {
         console.log(error);
       }
-
-      
     }
     if (!email && !password) {
       return (setEmailNameError(USER_EMPTY) && setPasswordNameError(PASS_EMPTY));

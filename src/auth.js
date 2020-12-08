@@ -1,6 +1,11 @@
 export const isAuthenticated = () => {
-  const la = window.localStorage.getItem('token');
-  
+  const data = JSON.parse(window.localStorage.getItem('data'));
+  if(!data) {
+    return false;
+  }
+  if(!data.token) {
+    return false;
+  }
   return true;
 };
 
