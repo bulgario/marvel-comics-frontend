@@ -195,19 +195,6 @@ const Search = (props) => {
         <Typography className={classes.title} variant="h6" noWrap>
           Bem vindo,{user.nome}
         </Typography>
-        <div className={classes.search}>
-          <div className={classes.searchIcon}>
-            <SearchIcon />
-          </div>
-          <InputBase
-            placeholder="Search…"
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-            inputProps={{ 'aria-label': 'search' }}
-          />
-        </div>
         <div>
           <Button 
             variant="contained" 
