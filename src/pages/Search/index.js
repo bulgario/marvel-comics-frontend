@@ -163,6 +163,13 @@ const Search = (props) => {
     }
   };
 
+  const handleLogout = () => {
+    window.localStorage.removeItem('data');
+    if (!window.localStorage.getItem('data')) {
+      props.history.push('/login');
+    }
+  }
+
   const nextPageComic = async(pageNumber) => {
     try {
       setLoading(true);
@@ -300,7 +307,7 @@ const Search = (props) => {
           </IconButton>
         </div>
         <div className={classes.icon}>
-          {/* <FavoriteIcon
+          <FavoriteIcon
             edge="end"
             aria-label="favorite"
             aria-haspopup="true"
@@ -308,7 +315,16 @@ const Search = (props) => {
             color="inherit"
           >
             <AccountCircle />
-          </FavoriteIcon> */}
+          </FavoriteIcon>
+        </div>
+        <div>
+        <Button 
+            variant="contained" 
+            color="primary"
+            onClick={() => handleLogout()}
+          >
+            Logout
+          </Button>
         </div>
       </Toolbar>
     </AppBar>
