@@ -20,6 +20,15 @@ itens, o numero de paginas é bem grande, logo, eu limitei o componente <Paginat
 - Uso do REDUX: por questoes de tempo não pude usar o Redux que me ajudaria em diversas questoes de state, como exemplo a pagina de characters ou comic que acabaram tendo repeticao de código, quebrando a logica do DRY(Dont repeat yourself).
 
 
+
+# Improvements
+
+Optei por usar Material UI para ter uma interface rápida e responsiva.
+A interface está estranha em algumas coisas mas tudo está relacionado a CSS e estilizacao faltando. por exemplo a <Pagination />
+
+
+
+
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
