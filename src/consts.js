@@ -9,4 +9,5 @@ export const ROUTES = {
   CHARACTER: "/character/:id"
 };
 
-export const BASE_URL = "http://localhost:4000"
+// export const BASE_URL = "http://localhost:4000"
+export const BASE_URL = "https://marvel-comics-lib.herokuapp.com"
