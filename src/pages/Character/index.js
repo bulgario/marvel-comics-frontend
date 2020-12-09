@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
+import api from "../../services/api";
 
 const useStyles = makeStyles({
   root: {
@@ -48,7 +49,7 @@ const Character = () => {
   const handleFavoritar = async () => {
     const { id } = JSON.parse(window.localStorage.getItem('data'));
     const id_api_comic = character.id;
-    await axios.post(`${BASE_URL}/add/favorite/character`, {
+    await api.post(`${BASE_URL}/add/favorite/character`, {
       id_api_comic: id_api_comic,
       id_user: id
     })

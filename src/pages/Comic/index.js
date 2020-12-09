@@ -10,6 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import api from "../../services/api";
 
 const useStyles = makeStyles({
   root: {
@@ -55,7 +56,7 @@ const Comic = (props) => {
     const { id } = JSON.parse(window.localStorage.getItem('data'));
     const id_api_comic = comic.id;
     try {
-      await axios.post(`${BASE_URL}/add/favorite/comic`, {
+      await api.post(`${BASE_URL}/add/favorite/comic`, {
         id_api_comic: id_api_comic,
         id_user: id
       })
