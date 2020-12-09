@@ -18,11 +18,15 @@ const useStyles = makeStyles({
   media: {
     height: 800,
   },
+  status: {
+    color: 'red'
+  }
 });
 
 const Comic = (props) => {
   const classes = useStyles();
   const [ comic, setComic ] = useState();
+  const [ status, setStatus ] = useState();
 
   useEffect(() => {
     getComic()
@@ -47,15 +51,21 @@ const Comic = (props) => {
   }
   
   const handleFavoritar = async () => {
+    setStatus("");
     const { id } = JSON.parse(window.localStorage.getItem('data'));
     const id_api_comic = comic.id;
-    await axios.post(`${BASE_URL}/add/favorite/comic`, {
-      id_api_comic: id_api_comic,
-      id_user: id
-    })
-    .then(data => {
-      console.log(data);
-    })
+    try {
+      await axios.post(`${BASE_URL}/add/favorite/comic`, {
+        id_api_comic: id_api_comic,
+        id_user: id
+      })
+      .then(data => {
+        setStatus(data.data.message);
+      }) 
+    } catch (error) {
+      setStatus("Comic já Favoritada!")
+      console.log("Error try Favoritar", error);
+    }
   }
 
   return (
@@ -74,8 +84,12 @@ const Comic = (props) => {
               <CardMedia
                 className={classes.media}
                 image={handleImage()}
-                title="Contemplative Reptile"
               />
+              { status && (
+                <Typography gutterBottom className={classes.status} variant="h4" component="h2">
+                {status}
+                </Typography>
+              )}
               <CardContent>
                 <Typography gutterBottom variant="h4" component="h2">
                   {comic.title}

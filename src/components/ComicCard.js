@@ -10,7 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 const useStyles = makeStyles({
   root: {
     width: 310,
-    height: 800
+    height: 500
   },
   bullet: {
     display: 'inline-block',
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
     marginBottom: 12,
   },
   media: {
-    height: 400,
+    height: 350,
     paddingTop: '56.25%',
   },
 });
@@ -53,13 +53,7 @@ const ComicCard = (props) => {
         <Typography className={classes.title} color="textSecondary">
           {comic.series.name}
         </Typography>
-      </CardContent>
-      <CardMedia
-        className={classes.media}
-        image={handleImage(comic)}
-        title={comic.title}
-      />
-      <CardActions>
+        <CardActions>
         <Button 
           size="small" 
           color="primary"
@@ -68,6 +62,13 @@ const ComicCard = (props) => {
           Saiba mais
         </Button>
       </CardActions>
+      </CardContent>
+      <CardMedia
+        className={classes.media}
+        image={handleImage(comic)}
+        title={comic.title}
+      />
+      
     </Card>
   );
 }

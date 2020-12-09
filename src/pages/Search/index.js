@@ -7,8 +7,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { Button } from '@material-ui/core';
@@ -16,6 +14,7 @@ import { Grid } from '@material-ui/core/';
 
 import ComicCard from "../../components/ComicCard";
 import CharacterCard from "../../components/CharacterCard";
+import Paginations from "../../components/Paginations";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -68,14 +67,18 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   icon: {
-    marginRight: 10,
+    marginRight: 20,
     display: 'none',
     [theme.breakpoints.up('md')]: {
       display: 'flex',
     },
-  cards: {
-    marginTop: 10
-  }
+    cards: {
+      marginTop: 10
+    }
+  },
+  button: {
+    paddingLeft: 10,
+    paddingRight: 10
   },
 }));
 
@@ -86,6 +89,17 @@ const Search = (props) => {
   const [ characterOption, setCharacterOption ] = useState(false);
   const [ comics, setComics ] = useState({});
   const [ characters, setCharacters ] = useState({});
+  const [ loading, setLoading ] = useState(false);
+
+  const [ totalResultsComics, setTotalResultsComic ] = useState(0);
+  const [ currentPageComic, setCurrentPageComic ] = useState(1);
+  
+  const [ totalResultsCharacter, setTotalResultsCharacter ] = useState(0);
+  const [ currentPageCharacter, setCurrentPageCharacter ] = useState(1);
+
+  const [ numberPagesComic, setNumberPagesComic ] = useState();
+  const [ numberPagesCharacter, setNumberPagesCharacter ] = useState();
+
 
   useEffect(() => {
     getUserData()
@@ -94,6 +108,11 @@ const Search = (props) => {
   useEffect(() => {
     getComicData()
     getCharacterData()
+  }, [])
+
+  useEffect(() => {
+    setNumberPagesComic(Math.floor(totalResultsComics / 20));
+    setNumberPagesCharacter(Math.floor(totalResultsCharacter / 20));
   }, [])
 
   const handleProfileMenuOpen = () => {
@@ -117,9 +136,12 @@ const Search = (props) => {
 
   const getComicData = async () => {
     try {
+      setLoading(true);
       await axios.get(`${BASE_URL}/comics`)
       .then(data => {
         setComics(data.data);
+        setTotalResultsComic(data.data.pagination.total);
+        setLoading(false);
     });
     } catch (error) {
       console.log("Error trying get comics", error)
@@ -128,14 +150,48 @@ const Search = (props) => {
 
   const getCharacterData = async () => {
     try {
+      setLoading(true);
       await axios.get(`${BASE_URL}/characters`)
       .then(data => {
+        console.log()
         setCharacters(data.data);
+        setTotalResultsCharacter(data.data.pagination.total);
+        setLoading(false);
     });
     } catch (error) {
       console.log("Error trying get characters", error)
     }
   };
+
+  const nextPageComic = async(pageNumber) => {
+    try {
+      setLoading(true);
+      await axios.get(`${BASE_URL}/comics/?offset=${pageNumber}`)
+      .then(data => {
+          setCurrentPageComic(pageNumber);
+          setComics(data.data);
+      setLoading(false);
+    });
+    } catch (error) {
+      console.log("Error trying get characters", error)
+    }
+  };
+
+  const nextPageCharacter = async(pageNumber) => {
+    try {
+      setLoading(true);
+      await axios.get(`${BASE_URL}/characters/?offset=${pageNumber}`)
+      .then(data => {
+        setCurrentPageCharacter(pageNumber);
+        setCharacters(data.data);
+      setLoading(false);
+    });
+    } catch (error) {
+      console.log("Error trying get characters", error)
+    }
+  };
+
+  
 
  const handleClick = (type) => {
     switch (type) {
@@ -161,20 +217,30 @@ const Search = (props) => {
  }
 
  const renderComic = () => (
-  <Grid container spacing={10} >
-    {comics.comics.map(comic => (
-        <Grid item className={classes.cards}>
-          <ComicCard 
-            comic={comic}
-            pagination={comics.pagination} 
-            history={props.history} 
-          />
-        </Grid>
-    ))}
-  </Grid>
+   <>
+    <Grid container spacing={10} >
+      {comics.comics.map(comic => (
+          <Grid item className={classes.cards}>
+            <ComicCard 
+              comic={comic}
+              pagination={comics.pagination} 
+              history={props.history} 
+            />
+          </Grid>
+      ))}
+    </Grid>
+    { totalResultsComics > 20 ? 
+      <Paginations 
+        pages={numberPagesComic} 
+        nextPage={nextPageComic}
+        currentPage={currentPageComic}
+      /> : null
+    }
+  </>
  );
 
  const renderCharacter = () => (
+  <>
   <Grid container spacing={10} >
     {characters.characters.map(character => (
         <Grid item className={classes.cards}>
@@ -186,6 +252,14 @@ const Search = (props) => {
         </Grid>
     ))}
   </Grid>
+  { totalResultsCharacter > 20 ? 
+     <Paginations 
+       pages={numberPagesCharacter} 
+       nextPage={nextPageCharacter}
+       currentPage={currentPageCharacter}
+     /> : null
+   }
+  </>
 );
 
   return (
@@ -195,7 +269,7 @@ const Search = (props) => {
         <Typography className={classes.title} variant="h6" noWrap>
           Bem vindo,{user.nome}
         </Typography>
-        <div>
+        <div className={classes.button}>
           <Button 
             variant="contained" 
             color="primary"
@@ -204,7 +278,7 @@ const Search = (props) => {
             Comics
           </Button>
         </div>
-        <div>
+        <div className={classes.button}>
           <Button 
             variant="contained" 
             color="primary"
