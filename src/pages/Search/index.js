@@ -300,7 +300,7 @@ const Search = (props) => {
           </IconButton>
         </div>
         <div className={classes.icon}>
-          <FavoriteIcon
+          {/* <FavoriteIcon
             edge="end"
             aria-label="favorite"
             aria-haspopup="true"
@@ -308,7 +308,7 @@ const Search = (props) => {
             color="inherit"
           >
             <AccountCircle />
-          </FavoriteIcon>
+          </FavoriteIcon> */}
         </div>
       </Toolbar>
     </AppBar>
